@@ -1,19 +1,21 @@
 class Solution {
     public int[] findBall(int[][] grid) {
-        int n = grid.length;
-        int m = grid[0].length;
-        int[]result = new int[m];
-        for(int i=0; i<m; i++){
-            result[i] = findBallGoes(0,i,grid);
-            
+        int result[] = new int[grid[0].length];
+
+        for (int col = 0; col < grid[0].length; col++) {
+            int currentCol = col;
+            for (int row = 0; row < grid.length; row++) {
+                int nextColumn = currentCol + grid[row][currentCol];
+                if (nextColumn < 0 ||
+                        nextColumn > grid[0].length - 1 ||
+                        grid[row][currentCol] != grid[row][nextColumn]) {
+                    result[col] = -1;
+                    break;
+                }
+                result[col] = nextColumn;
+                currentCol = nextColumn;
+            }
         }
         return result;
-    }
-    
-    public int findBallGoes(int row, int col, int[][]grid){
-        if(row==grid.length)return col;
-        int nextCol = col+grid[row][col];
-        if(nextCol<0||nextCol>grid[0].length-1||grid[row][col]!=grid[row][nextCol])return -1;
-        return findBallGoes(row+1,nextCol, grid);
     }
 }
