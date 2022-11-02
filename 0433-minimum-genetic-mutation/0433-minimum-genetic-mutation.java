@@ -1,42 +1,40 @@
 class Solution {
-    private int count = Integer.MAX_VALUE;;
-
-  public int minMutation(String start, String end, String[] bank) {
+   public int minMutation(String start, String end, String[] bank) {
+    if (start.equals(end)) return 0;
+    int moves = 0;
+    Set<Character> keysSet = new HashSet<>(Arrays.asList('A', 'C', 'G', 'T'));
+    Set<String> bankSet = new HashSet<>(Arrays.asList(bank));
     Set<String> visitedSet = new HashSet<>();
+    Queue<String> tmpQueue = new LinkedList<>();
     visitedSet.add(start);
-    _DFSHelper(start, end, bank, 0, visitedSet);
-    return count == Integer.MAX_VALUE ? -1 : count;
-  }
-
-  private void _DFSHelper(
-      String start, String end, String[] bank, int moves, Set<String> visitedSet) {
-    // Terminator
-    if (start.equals(end)) {
-      count = Math.min(count, moves);
-      return;
-    }
-    // Process
-    for (String validStr : bank) {
-      // If this str occured before, then skip it;
-      if (visitedSet.contains(validStr)) continue;
-      // Find out which VALID string only has one different than start
-      // (Because we could only move once a time);
-      int diff = 0;
-      for (int j = 0; j < 8; j++) {
-        if (start.charAt(j) != validStr.charAt(j)) {
-          diff += 1;
-        }
-        if (diff > 1) {
-          break;
+    tmpQueue.offer(start);
+    while (!tmpQueue.isEmpty()) {
+      int nsize = tmpQueue.size();
+      for (int i = 0; i < nsize; i++) {
+        String str = tmpQueue.poll();
+        if (str.equals(end)) return moves;
+        char tmpC[] = str.toCharArray();
+        // Replace the character one by one in current string
+        for (int j = 0; j < start.length(); j++) {
+          char cache = tmpC[j];
+          for (char key : keysSet) {
+            // If the new character is same as replaced char, then skip it;
+            if (tmpC[j] == key) continue;
+            tmpC[j] = key;
+            String tmpStr = new String(tmpC);
+            // If the new string is never used before and it is a valid gene
+            // string.
+            if (!visitedSet.contains(tmpStr) && bankSet.contains(tmpStr)) {
+              visitedSet.add(tmpStr);
+              tmpQueue.offer(tmpStr);
+            }
+          }
+          // Reverse State
+          tmpC[j] = cache;
         }
       }
-      if (diff == 1) {
-        visitedSet.add(validStr);
-        // Drill down
-        _DFSHelper(validStr, end, bank, moves + 1, visitedSet);
-        // Reverse state
-        visitedSet.remove(validStr);
-      }
+      moves += 1;
     }
+    return -1;
   }
 }
