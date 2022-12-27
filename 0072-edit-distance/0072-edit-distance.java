@@ -4,7 +4,7 @@ class Solution {
         if(i<0)return j+1;
         if(j<0)return i+1;
         if(dp[i][j]!=null)return dp[i][j];
-        if(str1.charAt(i)==str2.charAt(j))return f(i-1,j-1,str1,str2,dp);
+        if(str1.charAt(i)==str2.charAt(j))return dp[i][j] = f(i-1,j-1,str1,str2,dp);
         return dp[i][j] = 1+Math.min(f(i,j-1,str1,str2,dp),Math.min(f(i-1 ,j,str1,str2,dp),f(i-1,j-1,str1,str2,dp)));
     }
     
