@@ -12,8 +12,9 @@ class Solution {
             int t = pq.poll();
             // Syste
             sum = sum-(int)Math.floor(t/2);
-            if(t%2==0)pq.add((int)Math.floor(t/2));
-            else pq.add((int)Math.floor((t/2)+1));
+            // if(t%2==0)pq.add((int)Math.floor(t/2));
+            // else pq.add((int)Math.floor((t/2)+1));
+            pq.add((int)Math.floor(t-(t/2)));
         }
         return sum;
     }
