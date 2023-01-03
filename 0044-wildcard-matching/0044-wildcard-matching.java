@@ -1,31 +1,37 @@
 class Solution {
-    
-    public boolean f(int i,int j, String p, String s,Boolean[][] dp){
-        // System.out.println("H");
-        if(i==0 && j==0)return true ;
-        if(i==0 && j>0)return false;
-        if(j==0 && i>0){
-            for(int ii =1;ii<=i;ii++){
-                if(p.charAt(ii-1)!='*')return false;
-            }
-            return true;
-        }
-        
-        if(dp[i][j]!=null)return dp[i][j];
-        if(p.charAt(i-1)==s.charAt(j-1) || p.charAt(i-1)=='?'){
-            return dp[i][j]= f(i-1,j-1,p,s,dp);
-        }
-        if(p.charAt(i-1)=='*'){
-            return dp[i][j] =  f(i,j-1,p,s,dp)|f(i-1,j,p,s,dp);
-        }
-        return dp[i][j]=false;
-    }
-    
+
     public boolean isMatch(String s, String p) {
         int n = p.length();
         int m = s.length(); 
-        Boolean[][] dp = new Boolean[n+1][m+1];
+        boolean prev[] = new boolean[m + 1];
+        boolean cur[] = new boolean[m + 1];
+         prev[0] = true;
+        for(int j=1; j<=m; j++){
+           cur[j] = false;
+        }
         
-        return f(n,m,p,s,dp);
+        
+        for(int i=1; i<=n; i++){
+            boolean flag = true; 
+            for(int ii =1;ii<=i;ii++){
+                if(p.charAt(ii-1)!='*'){
+                    flag = false;
+                    break;
+                }
+            }
+            cur[0] = flag;
+            for(int j=1;j<=m; j++){
+                if(p.charAt(i-1)==s.charAt(j-1) || p.charAt(i-1)=='?'){
+                     cur[j]= prev[j-1];
+                }
+                else if(p.charAt(i-1)=='*'){
+                    cur[j] =  cur[j-1]|prev[j];
+                }
+                else cur[j]=false;
+            }
+            prev = (boolean[]) cur.clone();
+        }
+        
+        return prev[m];
     }
 }
