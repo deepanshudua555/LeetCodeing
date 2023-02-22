@@ -1,23 +1,24 @@
 class Solution {
     
-    public int f(int ind, int buy,int[]p, int n,Integer[][]dp){
-        if(ind>=n){
-            return 0;
-        }
-        int profit = 0;
-        if(dp[ind][buy]!=null)return dp[ind][buy];
-        if(buy==1){
-            profit = Math.max(-p[ind]+f(ind+1,0,p,n,dp), 0+f(ind+1,1,p,n,dp));
-        }
-        else{
-            profit = Math.max(p[ind]+f(ind+2,1,p,n,dp), 0+f(ind+1,0,p,n,dp));
-        }
-        return dp[ind][buy] = profit;
-    }
+   
     
-    public int maxProfit(int[] prices) {
-        int n = prices.length;    
-        Integer[][]dp = new Integer[n][2];
-        return f(0,1,prices,n,dp);
+    public int maxProfit(int[] p) {
+        int n = p.length;    
+        int[][]dp = new int[n+2][2];
+        // dp[n][0] = 0;
+        // dp[n][1] = 0;
+        for(int ind=n-1; ind>=0; ind--){
+            for(int buy = 0;buy<=1; buy++){
+                int profit = 0;
+                if(buy==1){
+                    profit = Math.max(-p[ind]+dp[ind+1][0], 0+dp[ind+1][1]);
+                }
+                else{
+                    profit = Math.max(p[ind]+dp[ind+2][1],0+dp[ind+1][0]);
+                }
+                 dp[ind][buy] = profit;
+            }
+        }
+        return dp[0][1];
     }
 }
