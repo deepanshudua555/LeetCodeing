@@ -1,23 +1,24 @@
 class Solution {
     
-    public int f(int ind, int buy,int[]p, int n,Integer[][]dp,int fee){
-        if(ind==n){
-            return 0;
-        }
-        int profit = 0;
-        if(dp[ind][buy]!=null)return dp[ind][buy];
-        if(buy==1){
-            profit = Math.max(-p[ind]+f(ind+1,0,p,n,dp,fee), 0+f(ind+1,1,p,n,dp,fee));
-        }
-        else{
-            profit = Math.max(p[ind]-fee+f(ind+1,1,p,n,dp,fee), 0+f(ind+1,0,p,n,dp,fee));
-        }
-        return dp[ind][buy] = profit;
-    }
+   
     
-    public int maxProfit(int[] prices, int fee) {
-        int n = prices.length;    
-        Integer[][]dp = new Integer[n][2];
-        return f(0,1,prices,n,dp,fee);
+    public int maxProfit(int[] p,int fee) {
+        int n = p.length;    
+        Integer[][]dp = new Integer[n+1][2];
+        dp[n][0] = 0;
+        dp[n][1] = 0;
+        for(int ind=n-1; ind>=0; ind--){
+            for(int buy = 0;buy<=1; buy++){
+                int profit = 0;
+                if(buy==1){
+                    profit = Math.max(-p[ind]+dp[ind+1][0], 0+dp[ind+1][1]);
+                }
+                else{
+                    profit = Math.max(p[ind]-fee+dp[ind+1][1],0+dp[ind+1][0]);
+                }
+                 dp[ind][buy] = profit;
+            }
+        }
+        return dp[0][1];
     }
 }
