@@ -1,29 +1,17 @@
 class Solution {
-    
-    public int f(int i, int prev, int n ,int[]nums,Integer[][] dp){
-        if(i==n)return 0;
-        if(dp[i][prev+1]!=null)return dp[i][prev+1];
-        int notTake = 0+f(i+1,prev,n, nums,dp);
-        int take = (int)-1e9;
-        if(prev==-1 || nums[i]>nums[prev]){
-            take = 1+f(i+1,i,n, nums,dp);
-        }
-         return dp[i][prev+1] = Math.max(notTake, take);
-        
-    }
-    
     public int lengthOfLIS(int[] nums) {
+        int maxi = 1;
         int n = nums.length;
-        int[][] dp = new int[n+1][n+1];
-        for(int ind = n-1;ind>=0; ind--){
-            for(int pi = ind-1;pi>=-1;pi--){
-                int len = 0+dp[ind+1][pi+1];
-                if(pi==-1||nums[ind]>nums[pi]){
-                    len = Math.max(len,1+dp[ind+1][ind+1]);
+        int[]dp = new int[n];
+        Arrays.fill(dp,1);
+        for(int i=0; i<n; i++){
+            for(int p=0;p<i; p++){
+                if(nums[p]<nums[i]){
+                    dp[i] = Math.max(dp[i],1+dp[p]);
                 }
-                dp[ind][pi+1] = len;
             }
+            maxi = Math.max(maxi,dp[i]);
         }
-        return dp[0][-1+1];
+        return maxi;
     }
 }
