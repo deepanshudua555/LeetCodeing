@@ -1,7 +1,7 @@
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
         // monotonically decreasing queue
-        Deque<Integer> dq = new LinkedList<>();
+        LinkedList<Integer> dq = new LinkedList<>();
         int i=0, j=0;
         int size = nums.length;
         int[] arr = new int[size-k+1];
